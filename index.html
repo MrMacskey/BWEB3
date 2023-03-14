@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+
+    <head>
+        <title>NikitaPershin</title>
+    </head>
+
+    <body>
+        <div>
+            <h2>ФОРМА</h2>
+
+            <form action="" method="POST">
+                <label>
+                Имя:<br/>
+                <input name="name" value="">
+                </label><br/>
+
+                <label>
+                e-mail:<br/>
+                <input name="mail" type="email"  placeholder="Введите вашу почту" >
+                </label><br/>
+
+                <label>
+                Дата рождения:<br/>
+                <input name="year" value="2000" type="text" >
+                </label><br/>
+
+                <label>
+                Пол:<br/>
+                <select name="gender">
+                <option value="z1">Мужской</option>
+                <option value="z2" selected="selected">Женский</option>
+                </select><br/>
+                </label>
+                
+
+                <label>
+                Сверхспособности:<br/>
+                <select name="abilities[]"
+                multiple="multiple">
+                <option value="z1">бессмертиe</option>
+                <option value="z2" selected="selected"> прохождение сквозь стены</option>
+                <option value="z3" selected="selected"> левитация</option>
+                </select><br/>
+                </label>
+
+            Число конечносткй:<br/>
+                <label><input type="radio" checked="checked"
+                name="radio-group-1" value="Значение1" >
+                1</label>
+                <label><input type="radio"
+                name="radio-group-1" value="Значение2" >
+                2</label>
+                <label><input type="radio"
+                name="radio-group-1" value="Значение3" >
+                3</label>
+                <label><input type="radio"
+                name="radio-group-1" value="Значение2" >
+                4</label>
+                <label><input type="radio"
+                name="radio-group-1" value="Значение2" >
+                5+</label><br/>
+
+                Узнали? Согласны?:<br/>
+                <label><input type="checkbox" checked="checked"
+                name="check-1">
+                Подпись</label><br/>
+
+            
+                <input type="submit" value="Отправить">
+            </form>
+        </div>
+    </body>
+
+</html>
