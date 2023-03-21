@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   // В суперглобальном массиве $_GET PHP хранит все параметры, переданные в текущем запросе через URL.
   if (!empty($_GET['save'])) {
     // Если есть параметр save, то выводим сообщение пользователю.
-    print('Спасибо, результаты сохранены.');
+    print('Форма отправлена');
   }
   // Включаем содержимое файла form.php.
   include('form.php');
@@ -24,13 +24,14 @@ if (empty($_POST['fio'])) {
   print('Заполните имя.<br/>');
   $errors = TRUE;
 }
-
-if (empty($_POST['year']) || !is_numeric($_POST['year']) || !preg_match('/^\d+$/', $_POST['year'])) {
-  print('Заполните год.<br/>');
+if (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+  print('Неверная почта.<br/>');
   $errors = TRUE;
 }
-
-
+if (empty($_POST['year']) || !is_numeric($_POST['year']) || !preg_match('/^\d+$/', $_POST['year'])) {
+  print('Неверный год.<br/>');
+  $errors = TRUE;
+}
 
 
 
@@ -45,27 +46,30 @@ if ($errors) {
 
 // Сохранение в базу данных.
 
-$user = 'db'; // Заменить на ваш логин uXXXXX
-$pass = '123'; // Заменить на пароль, такой же, как от SSH
-$db = new PDO('mysql:host=localhost;dbname=test', $user, $pass,
-  [PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]); // Заменить test на имя БД, совпадает с логином uXXXXX
+$user = 'u52994'; // Заменить на ваш логин uXXXXX
+$pass = '8294224'; // Заменить на пароль, такой же, как от SSH
+$db = new PDO(
+  'mysql:host=localhost;dbname=u52995',
+  $user,
+  $pass,
+  [PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+); // Заменить test на имя БД, совпадает с логином uXXXXX
 
 // Подготовленный запрос. Не именованные метки.
 try {
-  $stmt = $db->prepare("INSERT INTO application SET name = ?");
-  $stmt->execute([$_POST['fio']]);
-}
-catch(PDOException $e){
+  $stmt = $db->prepare("INSERT INTO application SET name = ? , email = ?, year = ?, sex = ?, arms = ?, biografy = ?");
+  $stmt->execute([$_POST['fio'], $_POST['email'], $_POST['year'], $_POST['sex'], $_POST['arms'], $_POST['biografy']]);
+} catch (PDOException $e) {
   print('Error : ' . $e->getMessage());
   exit();
 }
 
 //  stmt - это "дескриптор состояния".
- 
+
 //  Именованные метки.
 //$stmt = $db->prepare("INSERT INTO test (label,color) VALUES (:label,:color)");
 //$stmt -> execute(['label'=>'perfect', 'color'=>'green']);
- 
+
 //Еще вариант
 /*$stmt = $db->prepare("INSERT INTO users (firstname, lastname, email) VALUES (:firstname, :lastname, :email)");
 $stmt->bindParam(':firstname', $firstname);
