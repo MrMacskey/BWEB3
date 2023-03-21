@@ -1,0 +1,10 @@
+CREATE TABLE application (
+  id int(10) unsigned NOT NULL AUTO_INCREMENT,
+  name varchar(128) NOT NULL DEFAULT '',
+  email varchar(128) NOT NULL DEFAULT '',
+  year varchar(128) NOT NULL DEFAULT '',
+  sex varchar(128) NOT NULL DEFAULT '',
+  arms varchar(128) NOT NULL DEFAULT '0',
+  biography varchar(2048) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+)
