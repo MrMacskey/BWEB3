@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   // В суперглобальном массиве $_GET PHP хранит все параметры, переданные в текущем запросе через URL.
   if (!empty($_GET['save'])) {
     // Если есть параметр save, то выводим сообщение пользователю.
-    print('Форма отправлена');
+    print('Спасибо, результаты сохранены.');
   }
   // Включаем содержимое файла form.php.
   include('form.php');
@@ -21,18 +21,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 // Проверяем ошибки.
 $errors = FALSE;
 if (empty($_POST['fio'])) {
-  print('Заполните имя.<br/>');
+  print('ВВЕДИТЕ ИМЯ.<br/>');
   $errors = TRUE;
 }
 if (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-  print('Неверная почта.<br/>');
+  print('НЕВЕРНАЯ ПОЧТА.<br/>');
   $errors = TRUE;
 }
 if (empty($_POST['year']) || !is_numeric($_POST['year']) || !preg_match('/^\d+$/', $_POST['year'])) {
-  print('Неверный год.<br/>');
+  print('НЕВЕРНЫЙ ГОД.<br/>');
   $errors = TRUE;
 }
-
+if (empty($_POST['biografy'])) {
+  print('БИОГРАФИЯ ПУСТА.<br/>');
+  $errors = TRUE;
+}
 
 
 // *************
@@ -49,7 +52,7 @@ if ($errors) {
 $user = 'u52994'; // Заменить на ваш логин uXXXXX
 $pass = '8294224'; // Заменить на пароль, такой же, как от SSH
 $db = new PDO(
-  'mysql:host=localhost;dbname=u52995',
+  'mysql:host=localhost;dbname=u52994',
   $user,
   $pass,
   [PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
@@ -59,6 +62,13 @@ $db = new PDO(
 try {
   $stmt = $db->prepare("INSERT INTO application SET name = ? , email = ?, year = ?, sex = ?, arms = ?, biografy = ?");
   $stmt->execute([$_POST['fio'], $_POST['email'], $_POST['year'], $_POST['sex'], $_POST['arms'], $_POST['biografy']]);
+  $application_id = $db->lastInsertId();
+  $application_ability = $db->prepare("INSERT INTO application_ability SET  application_id = ?, ability_id = ?");
+  foreach($_POST["ability"] as $ability){   
+    $application_ability->execute([$application_id, $ability]);
+    print($ability);
+  }
+
 } catch (PDOException $e) {
   print('Error : ' . $e->getMessage());
   exit();
